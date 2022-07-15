@@ -9,8 +9,7 @@ public class Ant : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Start");
-        StartWalking();
+        MoveTo(new Vector2(2, 2));
     }
 
     // Update is called once per frame
@@ -21,20 +20,9 @@ public class Ant : MonoBehaviour
 
     public void StartWalking()
     {
-        Debug.Log($"speed: {speed}");
-
-        Vector2 forward = transform.up; //https://answers.unity.com/questions/609527/how-do-i-make-a-game-object-move-in-the-direction.html
-        Debug.Log($"forward: {forward}");
-
+        Vector2 forward = ForwardFromTransform(transform); //https://answers.unity.com/questions/609527/how-do-i-make-a-game-object-move-in-the-direction.html
         Vector2 velocity = forward * speed;
-        Debug.Log($"velocity: {velocity}");
         SetVelocity(velocity);
-
-        //GetVelocity
-        Debug.Log("StartWalking");
-         
-        Debug.Log(transform.position.x);
-        Debug.Log(transform.position.y);
     }
 
     public Vector2 GetVelocity()
@@ -48,5 +36,35 @@ public class Ant : MonoBehaviour
     {
         Rigidbody2D rb = gameObject.GetComponent<Rigidbody2D>();
         rb.velocity = velocity;
+    }
+
+    //Call as coroutine?
+    public void MoveTo(Vector2 target)
+    {
+        Vector2 vectorTo = target - ((Vector2) transform.position);
+        //vectorTo.Normalize(); Needed?
+        //var calculatedRotation = RotationInDirection(transform, vectorTo);
+        //transform.rotation = calculatedRotation;
+        //start moving
+        //stop moving
+    }
+
+    //TODO move to vector helper
+    //Modified https://forum.unity.com/threads/quaternion-lookrotation-in-2d.292572/
+    //public static Quaternion RotationInDirection(Transform currentTransform, Vector2 target) //TODO can it be made without current transform?
+    //{
+    //    float angle = AngleBetweenPoints(ForwardFromTransform(currentTransform), target);
+    //    Debug.Log("angle:" + angle);
+    //    return Quaternion.Euler(new Vector3(0f, 0f, angle));
+    //    //return Quaternion.Slerp(currentTransform.rotation, targetRotation, time.deltaTime);
+    //}
+    //public static float AngleBetweenPoints(Vector2 a, Vector2 b)
+    //{
+    //    return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
+    //}
+
+    public static Vector2 ForwardFromTransform(Transform transform)
+    {
+        return transform.up;
     }
 }
