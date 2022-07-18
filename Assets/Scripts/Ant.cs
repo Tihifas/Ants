@@ -5,6 +5,8 @@ using UnityEngine;
 public class Ant : MonoBehaviour
 {
     public float speed;
+    public IPickUpAble pickUpAble;
+    public bool Carrying { get => pickUpAble != null; }
 
     // Start is called before the first frame update
     void Start()
@@ -15,6 +17,7 @@ public class Ant : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //TODO: put in methods etc.
 
     }
 
