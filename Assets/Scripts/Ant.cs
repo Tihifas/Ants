@@ -26,7 +26,7 @@ public class Ant : MonoBehaviour
 
     public void StartWalking()
     {
-        Vector2 forward = ForwardFromTransform(transform); //https://answers.unity.com/questions/609527/how-do-i-make-a-game-object-move-in-the-direction.html
+        Vector2 forward = ThisAntsForward(); //https://answers.unity.com/questions/609527/how-do-i-make-a-game-object-move-in-the-direction.html
         Vector2 velocity = forward * speed;
         SetVelocity(velocity);
     }
@@ -55,6 +55,7 @@ public class Ant : MonoBehaviour
         //stop moving
     }
 
+    //USE THIS? https://answers.unity.com/questions/1244393/best-way-to-move-a-rigidbody2d-from-point-a-to-poi.html
     //TODO move to vector helper
     //Modified https://forum.unity.com/threads/quaternion-lookrotation-in-2d.292572/
     //public static Quaternion RotationInDirection(Transform currentTransform, Vector2 target) //TODO can it be made without current transform?
@@ -69,9 +70,9 @@ public class Ant : MonoBehaviour
     //    return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
     //}
 
-    public static Vector2 ForwardFromTransform(Transform transform)
+    public Vector2 ThisAntsForward()
     {
-        return transform.up;
+        return this.transform.up;
     }
 
     void OnTriggerEnter2D(Collider2D targetCollider)
@@ -80,11 +81,19 @@ public class Ant : MonoBehaviour
         bool collidedWithPickUpAble = targetGo.GetComponent<IPickUpAble>() != null;
         if (collidedWithPickUpAble)
         {
-            Debug.Log(collidedWithPickUpAble);
-
-            FixedJoint2D joint = (FixedJoint2D) gameObject.AddComponent(typeof(FixedJoint2D));
-            Rigidbody2D targetRb = targetCollider.GetComponent<Rigidbody2D>();
-            joint.connectedBody = targetRb;
+            PickUpObject(targetGo);
         }
+    }
+
+    private void PickUpObject(GameObject)
+    {
+        Rigidbody2D targetRb = targetCollider.GetComponent<Rigidbody2D>();
+
+        Vector2 forward = ThisAntsForward();
+        Vector2 carryPoint = ((Vector2)this.transform.position) + ThisAntsForward() * 0.4f;
+        targetGo.transform.position = carryPoint;
+
+        FixedJoint2D joint = (FixedJoint2D)gameObject.AddComponent(typeof(FixedJoint2D));
+        joint.connectedBody = targetRb;
     }
 }
