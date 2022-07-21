@@ -11,7 +11,10 @@ public class Ant : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MoveTo(new Vector2(2, 2));
+        Debug.Log("Start");
+        StartWalking();
+
+        //MoveTo(new Vector2(2, 2));
     }
 
     // Update is called once per frame
@@ -44,7 +47,7 @@ public class Ant : MonoBehaviour
     //Call as coroutine?
     public void MoveTo(Vector2 target)
     {
-        Vector2 vectorTo = target - ((Vector2) transform.position);
+        Vector2 vectorTo = target - ((Vector2)transform.position);
         //vectorTo.Normalize(); Needed?
         //var calculatedRotation = RotationInDirection(transform, vectorTo);
         //transform.rotation = calculatedRotation;
@@ -69,5 +72,19 @@ public class Ant : MonoBehaviour
     public static Vector2 ForwardFromTransform(Transform transform)
     {
         return transform.up;
+    }
+
+    void OnTriggerEnter2D(Collider2D targetCollider)
+    {
+        GameObject targetGo = targetCollider.gameObject;
+        bool collidedWithPickUpAble = targetGo.GetComponent<IPickUpAble>() != null;
+        if (collidedWithPickUpAble)
+        {
+            Debug.Log(collidedWithPickUpAble);
+
+            FixedJoint2D joint = (FixedJoint2D) gameObject.AddComponent(typeof(FixedJoint2D));
+            Rigidbody2D targetRb = targetCollider.GetComponent<Rigidbody2D>();
+            joint.connectedBody = targetRb;
+        }
     }
 }

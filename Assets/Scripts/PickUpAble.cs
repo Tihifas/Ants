@@ -16,14 +16,14 @@ public class PickUpAble : MonoBehaviour, IPickUpAble
         
     }
 
-    Transform IPickUpAble.Transform {
-        get { return transform; }
-        set { transform = value; }
-    }
+    //Transform IPickUpAble.Transform {
+    //    get { return transform; }
+    //    set { transform = value; }
+    //}
     
 }
 
 public interface IPickUpAble
 {
-    Transform Transform { get; set; }
+    //Transform Transform { get; set; }
 }
